@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown, ChevronRight, Search, ArrowRight } from "lucide-react";
 
 // Define types for better TypeScript support

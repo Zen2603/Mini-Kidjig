@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 type Company = {
   name: string;
@@ -45,9 +46,11 @@ const CompanyRoller: React.FC = () => {
             key={index}
             className="min-w-[180px] flex flex-col items-center justify-center bg-white border rounded-2xl shadow-md p-4"
           >
-            <img
+            <Image
               src={company.logo}
               alt={company.name}
+              width={64}
+              height={64}
               className="h-16 object-contain mb-2"
             />
             <div className="text-center font-semibold text-base">

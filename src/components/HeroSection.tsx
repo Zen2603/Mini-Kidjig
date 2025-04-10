@@ -1,7 +1,7 @@
 // components/HeroSection.tsx
 "use client"; // Use the client directive since we're using browser APIs
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./HeroSection.module.css";
 
 interface HeroSectionProps {
@@ -16,15 +16,34 @@ const HeroSection = ({
   title = "Modern Gradient",
   description = "A sleek, modern background with soft gradient spheres, subtle movement, and interactive particle effects. Perfect for contemporary web designs.",
   buttonText1 = "Explore More",
-  buttonText2 = "Explore More",
+  buttonText2 = "Learn More",
   onButtonClick = () => {},
 }: HeroSectionProps) => {
+  // Track window size to optimize particle count
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
+    // Check if we're in the browser environment
+    if (typeof window === "undefined") return;
+
+    // Responsive handler for window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Listen for window resize
+    window.addEventListener("resize", handleResize);
+
     // Create particle effect
     const particlesContainer = document.getElementById("particles-container");
     if (!particlesContainer) return;
 
-    const particleCount = 80;
+    // Adjust particle count based on screen size
+    const getParticleCount = () => (window.innerWidth < 768 ? 20 : 80);
+    const particleCount = getParticleCount();
 
     // Create particles
     for (let i = 0; i < particleCount; i++) {
@@ -35,8 +54,8 @@ const HeroSection = ({
       const particle = document.createElement("div");
       particle.className = styles.particle;
 
-      // Random size (small)
-      const size = Math.random() * 3 + 1;
+      // Random size (smaller on mobile)
+      const size = isMobile ? Math.random() * 2 + 1 : Math.random() * 3 + 1;
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
 
@@ -91,7 +110,7 @@ const HeroSection = ({
       }, delay * 1000);
     }
 
-    // Mouse interaction handler
+    // Optimize mouse interaction for different devices
     const handleMouseMove = (e: MouseEvent) => {
       if (!particlesContainer) return;
 
@@ -106,12 +125,17 @@ const HeroSection = ({
       const mouseXPercent = (mouseX / containerRect.width) * 100;
       const mouseYPercent = (mouseY / containerRect.height) * 100;
 
+      // Reduce particle creation on mobile
+      if (window.innerWidth < 768 && Math.random() > 0.2) return;
+
       // Create temporary particle
       const particle = document.createElement("div");
       particle.className = styles.particle;
 
-      // Small size
-      const size = Math.random() * 4 + 2;
+      // Small size, smaller on mobile
+      const size =
+        window.innerWidth < 768 ? Math.random() * 2 + 1 : Math.random() * 4 + 2;
+
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
 
@@ -125,8 +149,14 @@ const HeroSection = ({
       // Animate outward
       setTimeout(() => {
         particle.style.transition = "all 2s ease-out";
-        particle.style.left = `${mouseXPercent + (Math.random() * 10 - 5)}%`;
-        particle.style.top = `${mouseYPercent + (Math.random() * 10 - 5)}%`;
+        // Smaller movement on mobile
+        const moveDistance = window.innerWidth < 768 ? 3 : 10;
+        particle.style.left = `${
+          mouseXPercent + (Math.random() * moveDistance - moveDistance / 2)
+        }%`;
+        particle.style.top = `${
+          mouseYPercent + (Math.random() * moveDistance - moveDistance / 2)
+        }%`;
         particle.style.opacity = "0";
 
         // Remove after animation
@@ -135,12 +165,15 @@ const HeroSection = ({
         }, 2000);
       }, 10);
 
-      // Subtle movement of gradient spheres (also updating this)
+      // Subtle movement of gradient spheres
       const spheres = document.querySelectorAll(
         `.${styles["gradient-sphere"]}`
       );
-      const moveX = (e.clientX / window.innerWidth - 0.5) * 5;
-      const moveY = (e.clientY / window.innerHeight - 0.5) * 5;
+
+      // Reduce movement on smaller screens
+      const moveFactor = window.innerWidth < 768 ? 2 : 5;
+      const moveX = (e.clientX / window.innerWidth - 0.5) * moveFactor;
+      const moveY = (e.clientY / window.innerHeight - 0.5) * moveFactor;
 
       spheres.forEach((sphere) => {
         const element = sphere as HTMLElement;
@@ -148,17 +181,40 @@ const HeroSection = ({
       });
     };
 
-    // Add event listener
+    // Touch event handler for mobile
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!particlesContainer || e.touches.length === 0) return;
+
+      const touch = e.touches[0];
+
+      // Simulate mouse event with touch coordinates
+      const simulatedEvent = {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      } as MouseEvent;
+
+      // Use the same handler as mouse move, but at reduced frequency
+      if (Math.random() > 0.8) {
+        handleMouseMove(simulatedEvent);
+      }
+    };
+
+    // Add event listeners
     document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("touchmove", handleTouchMove);
 
     // Cleanup function
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [isMobile]);
 
   return (
-    <section className={styles.heroSection}>
+    <section
+      className={`${styles.heroSection} ${isMobile ? styles.mobileHero : ""}`}
+    >
       <div className={styles["gradient-background"]}>
         <div
           className={`${styles["gradient-sphere"]} ${styles["sphere-1"]}`}
@@ -179,14 +235,18 @@ const HeroSection = ({
       </div>
 
       <div className={styles["content-container"]}>
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <button className={styles.btn} onClick={onButtonClick}>
-          {buttonText1}
-        </button>
-        <button className={styles.btn1} onClick={onButtonClick}>
-          {buttonText2}
-        </button>
+        <h1 className={isMobile ? styles.mobileTitle : ""}>{title}</h1>
+        <p className={isMobile ? styles.mobileDescription : ""}>
+          {description}
+        </p>
+        <div className={styles["buttons-container"]}>
+          <button className={styles.btn} onClick={onButtonClick}>
+            {buttonText1}
+          </button>
+          <button className={styles.btn1} onClick={onButtonClick}>
+            {buttonText2}
+          </button>
+        </div>
       </div>
     </section>
   );

@@ -81,19 +81,19 @@ const steps = [
     title: "Create Account",
     description:
       "Sign up and create your account to get started with Kidjig API. Access the dashboard to manage your projects and monitor usage.",
-    image: "/api/placeholder/400/400",
+    image: "https://placehold.co/400x400/3b82f6/FFFFFF?text=Create+Account",
   },
   {
     title: "Get API Key",
     description:
       "Generate your API key from the API Keys section in your dashboard. This key will be used to authenticate all your API requests.",
-    image: "/api/placeholder/400/400",
+    image: "https://placehold.co/400x400/8b5cf6/FFFFFF?text=Get+API+Key",
   },
   {
     title: "Make API Calls",
     description:
       "Use your API key to authenticate and start making API calls. Follow the examples below to get started with different programming languages.",
-    image: "/api/placeholder/400/400",
+    image: "https://placehold.co/400x400/10b981/FFFFFF?text=Make+API+Calls",
   },
 ];
 
@@ -158,21 +158,20 @@ export default function QuickStartGuide({
   };
 
   // Generate random shapes for the background - now using useMemo to prevent recreation
-  const colors = ["#3b82f6", "#8b5cf6", "#ec4899", "#10b981"];
-  const shapes = useMemo(
-    () =>
-      Array.from({ length: 15 }, (_, i) => ({
-        id: i,
-        type: Math.random() > 0.5 ? "circle" : "square",
-        size: 20 + Math.random() * 80,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        duration: 60 + Math.random() * 40, // Much slower animation
-        delay: Math.random() * 10,
-      })),
-    []
-  );
+  const shapes = useMemo(() => {
+    const colors = ["#3b82f6", "#8b5cf6", "#ec4899", "#10b981"];
+
+    return Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      type: Math.random() > 0.5 ? "circle" : "square",
+      size: 20 + Math.random() * 80,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      duration: 60 + Math.random() * 40,
+      delay: Math.random() * 10,
+    }));
+  }, []);
 
   const currentStep = hoveredStep !== null ? hoveredStep : activeStep;
 

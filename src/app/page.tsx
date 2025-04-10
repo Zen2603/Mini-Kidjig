@@ -1,26 +1,26 @@
-import Image from "next/image";
-import Link from "next/link";
-import {
-  ChevronRight,
-  Search,
-  ExternalLink,
-  Info,
-  ChevronDown,
-  Github,
-  Twitter,
-  Linkedin,
-  Youtube,
-  MessageSquare,
-  House,
-  FileBox,
-  Sparkles,
-  KeyRound,
-  Star,
-  ChartColumn,
-  BookOpen,
-  CircleHelp,
-  Coins,
-} from "lucide-react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import {
+//   ChevronRight,
+//   Search,
+//   ExternalLink,
+//   Info,
+//   ChevronDown,
+//   Github,
+//   Twitter,
+//   Linkedin,
+//   Youtube,
+//   MessageSquare,
+//   House,
+//   FileBox,
+//   Sparkles,
+//   KeyRound,
+//   Star,
+//   ChartColumn,
+//   BookOpen,
+//   CircleHelp,
+//   Coins,
+// } from "lucide-react";
 import HeroSection from "../components/HeroSection";
 import InfiniteCarousel from "@/components/InfiniteCarousel";
 import Sidebar from "@/components/Sidebar";

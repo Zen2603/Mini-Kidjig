@@ -101,7 +101,7 @@ const Footer = () => {
         <div className="mt-12 flex flex-col md:flex-row items-center justify-between">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <Image
-              src="/microsoft-logo.png"
+              src="/microsoft-logo.svg"
               alt="Microsoft Logo"
               width={40}
               height={40}

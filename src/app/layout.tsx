@@ -3,7 +3,20 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// // Use next/font/google for your Material Symbols font too
+// import { Material_Symbols_Outlined } from "next/font/google";
+
+// const materialSymbols = Material_Symbols_Outlined({
+//   subsets: ["latin"],
+//   display: "optional",
+//   // Include necessary variants for Material Symbols
+//   axes: ["FILL", "GRAD", "opsz", "wght"],
+// });
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "optional", // Add display parameter
+});
 
 export const metadata: Metadata = {
   title: "Enterprise AI Gateway",
@@ -18,10 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home"
-        />
+        {/* The Font Awesome CDN link can remain as is */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
